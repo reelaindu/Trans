@@ -32,11 +32,29 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     recognition.continuous = false;
     recognition.interimResults = true; // Safe to turn on now for live typing effect!
 
+    function cleanSinhalaVoiceText(text) {
+        let cleanText = text;
+        
+        // Smart Voice Commands for Punctuation (Voice formatting)
+        cleanText = cleanText.replace(/\s*නව ඡේදය\s*/g, "\n\n");
+        cleanText = cleanText.replace(/\s*ඊළඟ පේළිය\s*/g, "\n");
+        cleanText = cleanText.replace(/\s*තිත\s*/g, ". ");
+        cleanText = cleanText.replace(/\s*කොමාව\s*/g, ", ");
+        cleanText = cleanText.replace(/\s*ප්‍රශ්නාර්ථය\s*/g, "? ");
+        
+        // Auto-fix common spacing issues around punctuation
+        cleanText = cleanText.replace(/\s+\./g, ".");
+        cleanText = cleanText.replace(/\s+,/g, ",");
+        cleanText = cleanText.replace(/\s+\?/g, "?");
+        
+        return cleanText;
+    }
+
     recognition.onstart = () => {
         isRecording = true;
         startBtn.classList.add('recording');
         startBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Listening';
-        statusText.textContent = "Listening... Speak in Sinhala now.";
+        statusText.textContent = "Listening... Speak in Sinhala now. (Say 'තිත' for '.', 'කොමාව' for ',')";
         statusText.classList.add('listening');
     };
 
@@ -53,6 +71,9 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         }
 
         if (finalPhrase) {
+            // Apply Smart AI Logic for Punctuation and Cleanup
+            finalPhrase = cleanSinhalaVoiceText(finalPhrase);
+            
             finalTranscriptAccumulator += finalPhrase;
             voiceResult.value = finalTranscriptAccumulator;
             voiceResult.scrollTop = voiceResult.scrollHeight;
