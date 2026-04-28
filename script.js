@@ -19,6 +19,7 @@ const statusText = document.getElementById('status-text');
 
 let recognition;
 let isRecording = false;
+let lastProcessedIndex = -1;
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -27,9 +28,10 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     // Set language to Sinhala (Sri Lanka)
     recognition.lang = 'si-LK';
     recognition.continuous = true;
-    recognition.interimResults = true;
+    recognition.interimResults = false;
 
     recognition.onstart = () => {
+        lastProcessedIndex = -1; // Reset when starting a new session
         isRecording = true;
         startBtn.classList.add('recording');
         startBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Listening';
@@ -39,13 +41,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onresult = (event) => {
         let finalTranscript = '';
-        let interimTranscript = '';
 
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
+            // Prevent duplicate outputs by keeping track of the last processed index
+            if (event.results[i].isFinal && i > lastProcessedIndex) {
                 finalTranscript += event.results[i][0].transcript + ' ';
-            } else {
-                interimTranscript += event.results[i][0].transcript;
+                lastProcessedIndex = i; // Mark this index as processed
             }
         }
 
