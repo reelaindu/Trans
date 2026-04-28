@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinhala Voice Typing & Translator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+Sinhala:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>සිංහල Voice Typing</h1>
+        <p class="subtitle">Voice to Text & Singlish Transliteration (Iskoola Pota Font)</p>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('voice-tab')">
+                <i class="fas fa-microphone"></i> Voice Typing
+            </button>
+            <button class="tab-btn" onclick="switchTab('translate-tab')">
+                <i class="fas fa-language"></i> Singlish Translate
+            </button>
+        </div>
+
+        <!-- Voice Typing Tab -->
+        <div id="voice-tab" class="tab-content active">
+            <div class="controls">
+                <button id="start-btn" class="action-btn">
+                    <i class="fas fa-microphone"></i> Start Listening
+                </button>
+                <button id="download-voice-btn" class="action-btn secondary" title="Download as TXT">
+                    <i class="fas fa-download"></i> Save
+                </button>
+                <button id="clear-voice-btn" class="action-btn secondary">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+            <p id="status-text" class="status-text">Click 'Start Listening' and speak in Sinhala.</p>
+            <div class="textarea-wrapper">
+                <textarea id="voice-result" placeholder="ඔබ කියන දේ මෙහි ටයිප් වේවි..."></textarea>
+                <button class="copy-btn" onclick="copyText('voice-result')" title="Copy text">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <div class="stats" id="voice-stats">Words: 0 | Characters: 0</div>
+            </div>
+        </div>
+
+        <!-- Singlish Translate Tab -->
+        <div id="translate-tab" class="tab-content">
+            <div class="translate-grid">
+                <div class="input-group">
+                    <label>Singlish Input</label>
+                    <textarea id="singlish-input" placeholder="Type here (e.g. oyaata kohomadha)"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Sinhala Output (Iskoola Pota)</label>
+                    <div class="textarea-wrapper">
+                        <textarea id="sinhala-output" readonly placeholder="ඔයාට කොහොමද"></textarea>
+                        <button class="copy-btn" onclick="copyText('sinhala-output')" title="Copy text">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <div class="stats" id="translate-stats">Words: 0 | Characters: 0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="download-translate-btn" class="action-btn secondary" title="Download Sinhala Output">
+                    <i class="fas fa-download"></i> Save
+                </button>
+                <button id="clear-translate-btn" class="action-btn secondary">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"><i class="fas fa-check-circle"></i> Copied to clipboard!</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
